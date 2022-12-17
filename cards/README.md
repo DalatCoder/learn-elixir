@@ -55,9 +55,52 @@ defmodule Cards do
 end
 ```
 
-## Lists and Strings
+### Lists and Strings
 
 - Using bracket `[]`
 - String in written inside `""` (convention)
 - `iex` does not automatically reload or recompile our code whenever something changes.
   We can type `recompile` inside the shell to recompile our project.
+
+### OOP vs Functional Programming
+
+Cards - OOP Approach
+
+- Cards class
+
+  - `this.suit string`
+  - `this.value string`
+
+- Deck class
+  - `this.cards <[Card]>`
+  - `this.shuffle <Function>`
+  - `this.save <Function>`
+  - `this.load <Function>`
+
+### Method arguments
+
+Implement shuffle function
+
+```elixir
+defmodule Cards do
+  def create_deck do
+    ["Ace", "Two", "Three"]
+  end
+
+  def shuffle(deck) do
+    Enum.shuffle(deck)
+  end
+end
+```
+
+Inside `IEx`
+
+```sh
+deck = Cards.create_deck
+
+Cards.shuffle(deck)
+Cards.shuffle(deck)
+Cards.shuffle(deck)
+```
+
+### Immutability in Elixir

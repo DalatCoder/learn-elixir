@@ -1,5 +1,7 @@
 # Cards
 
+## Generate new project
+
 The first project using `elixir`
 
 Using `mix` to create new `project`: `mix new cards`
@@ -52,3 +54,10 @@ defmodule Cards do
 
 end
 ```
+
+## Lists and Strings
+
+- Using bracket `[]`
+- String in written inside `""` (convention)
+- `iex` does not automatically reload or recompile our code whenever something changes.
+  We can type `recompile` inside the shell to recompile our project.

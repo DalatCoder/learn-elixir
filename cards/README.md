@@ -104,3 +104,33 @@ Cards.shuffle(deck)
 ```
 
 ### Immutability in Elixir
+
+We never ever are modifying an existing data structure in place.
+
+Immutability means that we don't change any of the existing data. Instead,
+we create a copy of the data and then change whatever we want in some fashion.
+
+### Searching a list
+
+We will implement the function called `contains?` to check whether the
+card exists in the deck.
+
+The `?` is valid in function name in `elixir`. The convention is that if
+a function has a question mark in it, it's probably going to return a `true`
+or `false` boolean value.
+
+```elixir
+defmodule Cards do
+  def create_deck do
+    ["Ace", "Two", "Three"]
+  end
+
+  def shuffle(deck) do
+    Enum.shuffle(deck)
+  end
+
+  def contains?(deck, card) do
+    Enum.member?(deck, card)
+  end
+end
+```

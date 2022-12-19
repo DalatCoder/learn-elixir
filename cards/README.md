@@ -139,7 +139,7 @@ end
 
 Get the deck of cards
 
-#### #1. option 1
+#### option 1
 
 We get an array
 
@@ -157,7 +157,7 @@ def create_deck do
 end
 ```
 
-#### #2. option 2
+#### option 2
 
 Using `List.flatten` to flat an array into a list
 
@@ -177,7 +177,7 @@ Using `List.flatten` to flat an array into a list
   end
 ```
 
-#### #3. option 3
+#### option 3
 
 ```elixir
   def create_deck do
@@ -189,3 +189,122 @@ Using `List.flatten` to flat an array into a list
     end
   end
 ```
+
+## Pattern Matching
+
+```elixir
+def deal(deck, hand_size) do
+  Enum.split(deck, hand_size)
+end
+
+{ hand, rest_of_deck } = deal([], 5)
+```
+
+Pattern matching is used any time that we use the equals sign.
+
+```elixir
+colors = ["red"]
+
+[color_red] = ["red"]
+
+[color_red, color_blue] = ["red", "blue"]
+```
+
+### Elixir's relationship with Erlang
+
+Elixir is not a standalone programming language.
+
+- Code we write
+- Gets fed into Elixir
+- Transpiled into Erlang
+- Compiled and executed by BEAM (like `JVM` in Java)
+
+Elixir sits on top of Erlang, give us a better interface to Erlang.
+
+Some functions are not fully transformed into elixir code, so we need
+to use the `:erlang` to get it done.
+
+```elixir
+def save(deck, filename) do
+  binary = :erlang.term_to_binary(deck)
+  File.write(filename, binary)
+end
+```
+
+### Check condition using case
+
+```elixir
+  def load(filename) do
+    {status, binary} = File.read(filename)
+
+    case status do
+      :ok -> :erlang.binary_to_term(binary)
+      :error -> "That file does not exist"
+    end
+  end
+```
+
+### Pattern matching in case statements
+
+Whenever we see colon and then a word inside of elixir, this is a primitive data
+type that we refer to as an `atom`
+
+`Atom` are used throughout elixir as handling kind of like `status codes` or
+`messages` or `handling control flow` throughout our application.
+
+The most common `atom` that we're going to see while writing are `:ok` and `:error`
+
+```elixir
+  def load(filename) do
+    case File.read(filename) do
+      {:ok, binary} -> :erlang.binary_to_term(binary)
+      {:error, reason} -> reason
+    end
+  end
+```
+
+If we don't want to use the second variable, prefix it with `_`
+
+```elixir
+  def load(filename) do
+    case File.read(filename) do
+      {:ok, binary} -> :erlang.binary_to_term(binary)
+      {:error, _reason} -> reason
+    end
+  end
+```
+
+### The `pipe` operator
+
+Get the hand by calling some functions in order
+
+```elixir
+def create_hand(hand_size) do
+  deck = Cards.create_deck()
+  deck = Cards.shuffle(deck)
+  hand = Cards.deal(deck, hand_size)
+end
+```
+
+Using the `pipe` operator `|>`
+
+```elixir
+  def create_hand(hand_size) do
+    Cards.create_deck()
+    |> Cards.shuffle()
+    |> Cards.deal(hand_size)
+  end
+```
+
+The operator wants us to write methods that take consistent of
+the `first` argument.
+
+### Module documentation
+
+The `mix.exs` file is like `package.json`
+
+Install the `xdocs` package
+
+- Open `mix.exs` file
+- `deps`: `[ { :ex_doc: "~> 0.12"} ]`
+- Run `mix deps.get` to install `:ex_doc` version `0.12`

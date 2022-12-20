@@ -141,3 +141,32 @@ def pick_color(image) do
   [red, green, blue]
 end
 ```
+
+### Updating structs
+
+Add new prop to the struct`
+
+```elixir
+defmodule Identicon.Image do
+  defstruct hex: nil, color: nil
+end
+```
+
+To update struct, we create new struct with all existing properties
+and then update any props we need
+
+```elixir
+def pick_color(image) do
+  %Identicon.Image{hex: hex_list} = image
+  [red, green, blue | _tail] = hex_list
+  %Identicon.Image{image | color: {red, green, blue}}
+end
+```
+
+Elixir supports pattern matching in argument list
+
+```elixir
+def pick_color(%Identicon.Image{hex: [red, green, blue | _tail]} = image) do
+  %Identicon.Image{image | color: {red, green, blue}}
+end
+```

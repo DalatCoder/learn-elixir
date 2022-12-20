@@ -170,3 +170,51 @@ def pick_color(%Identicon.Image{hex: [red, green, blue | _tail]} = image) do
   %Identicon.Image{image | color: {red, green, blue}}
 end
 ```
+
+### Building the grid
+
+Flow
+
+- Hex list contains 16 numbers
+- `Enum.chunk(3)` to chunk the original lists into some
+  chunks, each chunk is a list and contain 3 numbers
+- Then, we mirror each rows to make the complete row
+
+```elixir
+def build_grid(image) do
+  %Identicon.Image{hex: hex} = image
+
+  hex
+  |> Enum.chunk(3)
+end
+```
+
+### Mirroring a Row
+
+Currently we have a list of chunks like this
+
+```elixir
+Identicon.main("hieu")
+
+# [[150, 136, 85], [19, 45, 197], [208, 235, 46], [215, 192, 252], [78, 243, 66]]
+```
+
+We need to mirror each chunk like this
+
+```elixir
+# [[150, 136, 85, 136, 150]]
+```
+
+The help function looks like this
+
+```elixir
+def mirror_row(row) do
+  # [145, 46, 200]
+  [first, second | _tail] = row
+
+  # [145, 46, 200, 46, 145]
+  row ++ [second, first]
+end
+```
+
+We use `++` operator to join two lists together.

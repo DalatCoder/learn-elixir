@@ -71,3 +71,48 @@ In summary, we turn our input into a list of numbers. We use
 the first three numbers in there to generate the color of our
 identical line. We assign each of these numbers onto our grid
 and then if a given cell is even, we will show the color.
+
+## Structs - Elixir's Data Modeling Tool
+
+### Modeling data with Structs
+
+A struct is just like `map`, they just have two advantages over maps:
+
+- they can be assigned default values
+- they have some additional compile time checking of properties
+
+To define a struct, we need to make a new module
+
+```elixir
+defmodule Identicon.Image do
+  defstruct hex: nil
+end
+```
+
+Define a struct called `Identicon.Image` that has 1 property
+called `hex` and the default value is `nil`
+
+To create new struct
+
+```elixir
+%Identicon.Image{}
+%Identicon.Image{hex: []}
+```
+
+We change the `hash_input` function to return the struct
+
+```elixir
+def hash_input(input) do
+  hex =
+    :crypto.hash(:md5, input)
+    |> :binary.bin_to_list()
+
+  %Identicon.Image{hex: hex}
+end
+```
+
+The struct only contains properties, not methods. The struct is
+just a map under the hood and has absolutely no ability to
+attach any functions to it. It can only hold some primitive data.
+
+### Pattern Matching Structs

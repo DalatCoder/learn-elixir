@@ -2,11 +2,15 @@ defmodule CardsTest do
   use ExUnit.Case
   doctest Cards
 
-  test "contain card in deck" do
-    assert Cards.contains?(["Ace", "Two"], "Ace") == true
+  test "create_deck makes 20 cards" do
+    deck_length = length(Cards.create_deck())
+    assert deck_length == 20
   end
 
-  test "not contain card in deck" do
-    assert Cards.contains?(["Ace", "Two"], "Three") == false
+  test "shuffling a deck randomizes it" do
+    deck = Cards.create_deck()
+    refute deck == Cards.shuffle(deck)
+
+    # assert deck != Cards.shuffle(deck)
   end
 end

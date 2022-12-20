@@ -367,9 +367,9 @@ Open `cards_test.exs` inside `test` folder.
 
 In `elixir`, there are 2 types of tests that we can write
 
-- Testing some singular and particular fact using `assertion`
+- Testing some singular and particular fact using `assertion` | (`case tests`)
 - The secod type of testing is one of the most interesting and awesome methods of testing
-  called `doc testing`
+  called `doc tests`
 
 DocTests
 
@@ -377,3 +377,126 @@ DocTests
 - Run `mix test`
 
 ### Writing effective `doctests`
+
+Open `iex` shell, write some simple code and then copy all the code we have
+written into our `function`
+
+```elixir
+defmodule Cards do
+  @moduledoc """
+    Provides methods for creating and handling a deck of cards
+  """
+
+  @doc """
+    Returns a list of strings representing a deck of playing cards
+  """
+  def create_deck do
+    values = ["Ace", "Two", "Three", "Four", "Five"]
+    suits = ["Spades", "Clubs", "Hearts", "Diamonds"]
+
+    for suit <- suits, value <- values do
+      "#{value} of #{suit}"
+    end
+  end
+
+  def shuffle(deck) do
+    Enum.shuffle(deck)
+  end
+
+  @doc """
+    Determines whether a deck contains a given card
+
+    ## Examples
+      iex> deck = Cards.create_deck()
+      iex> Cards.contains?(deck, "Ace of Spades")
+      true
+  """
+  def contains?(deck, card) do
+    Enum.member?(deck, card)
+  end
+
+  @doc """
+    Divides a deck into a hand and the remainder of the deck.
+    The `hand_size` argument indicates how many cards should
+    be in the hand.
+
+    ## Examples
+
+      iex> deck = Cards.create_deck
+      iex> {hand, deck} = Cards.deal(deck, 1)
+      iex> hand
+      ["Ace of Spades"]
+  """
+  def deal(deck, hand_size) do
+    Enum.split(deck, hand_size)
+  end
+
+  def save(deck, filename) do
+    binary = :erlang.term_to_binary(deck)
+    File.write(filename, binary)
+  end
+
+  def load(filename) do
+    case File.read(filename) do
+      {:ok, binary} -> :erlang.binary_to_term(binary)
+      {:error, reason} -> reason
+    end
+  end
+
+  def create_hand(hand_size) do
+    Cards.create_deck()
+    |> Cards.shuffle()
+    |> Cards.deal(hand_size)
+  end
+end
+
+```
+
+### Writing `case tests`
+
+```elixir
+defmodule CardsTest do
+  use ExUnit.Case
+  doctest Cards
+
+  test "create_deck makes 20 cards" do
+    deck_length = length(Cards.create_deck())
+    assert deck_length == 20
+  end
+end
+```
+
+What do I test?
+
+What behaviours do you really are about inside this module?
+
+Maybe I really care that the deck that is created by `create_deck` has 20 cards
+inside of it. That's a really important thing. Not only does it make sure that
+I have the correct number of cards, but it also kind of implicitly implies that
+`create_deck` is going to return a `list` to me as well.
+
+```elixir
+defmodule CardsTest do
+  use ExUnit.Case
+  doctest Cards
+
+  test "create_deck makes 20 cards" do
+    deck_length = length(Cards.create_deck())
+    assert deck_length == 20
+  end
+
+  test "shuffling a deck randomizes it" do
+    deck = Cards.create_deck()
+    refute deck == Cards.shuffle(deck)
+
+    # assert deck != Cards.shuffle(deck)
+  end
+end
+```
+
+Because `elixir` is functional programming style. With `FP`, we have learned
+that we create some basic object representing our working data and then
+we pass it off to functions and get some result back.
+
+That means that when we test our code, we could create some basic object, passes
+off to the function and then do some basic checks on the returned object.

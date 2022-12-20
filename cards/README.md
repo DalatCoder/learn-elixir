@@ -306,10 +306,12 @@ The `mix.exs` file is like `package.json`
 Install the `xdocs` package
 
 - Open `mix.exs` file
-- `deps`: `[ { :ex_doc: "~> 0.12"} ]`
+- `deps`: `[ { :ex_doc, "~> 0.12"} ]`
 - Run `mix deps.get` to install `:ex_doc` version `0.12`
 
 ## Testing and Documentation
+
+### Documentation with `ex_doc`
 
 Write documentations using `ex_doc`:
 
@@ -354,3 +356,24 @@ end
 ```
 
 - Generate docs using command: `mix docs`
+
+### Introduction to testing
+
+Testing in `exlixir` is a first class citizen. So in other words, teting is
+incredibly fully featured out of the box without any real need to add
+in additional libraries to write solid tests around our code.
+
+Open `cards_test.exs` inside `test` folder.
+
+In `elixir`, there are 2 types of tests that we can write
+
+- Testing some singular and particular fact using `assertion`
+- The secod type of testing is one of the most interesting and awesome methods of testing
+  called `doc testing`
+
+DocTests
+
+- Write some function docs and an examples code
+- Run `mix test`
+
+### Writing effective `doctests`

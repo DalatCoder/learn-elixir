@@ -312,3 +312,33 @@ After that, we use filter to only get the list contains even number
     %Identicon.Image{image | grid: even_grid}
   end
 ```
+
+### Planning Image Creation
+
+```elixir
+defmodule Identicon.Image do
+  defstruct hex: nil, color: nil, grid: nil, pixel_map: nil
+end
+```
+
+```elixir
+def build_pixel_map(image) do
+  %Identicon.Image{grid: grid} = image
+
+  pixel_map =
+    Enum.map(grid, fn {_code, index} ->
+      horizontal = rem(index, 5) * 50
+      vertical = div(index, 5) * 50
+
+      top_left = {horizontal, vertical}
+      bottom_right = {horizontal + 50, vertical + 50}
+
+      {top_left, bottom_right}
+    end)
+
+  %Identicon.Image{image | pixel_map: pixel_map}
+end
+```
+
+With each pixel, we need to caculate the `top_left` and `bottom_right` of the pixel
+so that we can pass this information into the library to draw the image.

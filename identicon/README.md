@@ -342,3 +342,7 @@ end
 
 With each pixel, we need to caculate the `top_left` and `bottom_right` of the pixel
 so that we can pass this information into the library to draw the image.
+
+### Drawing rectangles
+
+We are going to use the `erlang` library called `egd` to draw image.

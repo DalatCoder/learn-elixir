@@ -500,3 +500,80 @@ we pass it off to functions and get some result back.
 
 That means that when we test our code, we could create some basic object, passes
 off to the function and then do some basic checks on the returned object.
+
+## Other data structure
+
+- maps
+- keyword lists
+
+### Maps
+
+Maps are collections of key - value pairs.
+
+```elixir
+colors = %{primary: "red"}
+
+colors.primary
+```
+
+Maps can hae multiple properties associated with them
+
+```elixir
+colors = %{primary: "red", secondary: "blue"}
+
+colors.primary
+colors.secondary
+```
+
+Map with pattern matching
+
+```elixir
+colors = %{primary: "red", secondary: "blue"}
+
+%{ secondary: secondary_color } = colors
+secondary_color
+```
+
+Updating values in a Map
+
+```elixir
+colors = %{primary: "red"}
+
+# mutate object is not allowed
+# colors.primary = "blue" | CompileError
+```
+
+The iead of how we handle data inside `elixir`: all the data structures we ever create.
+We do not manipulate, we do not change. We create a new data structure out of the
+existing one with some litte tiny difference to it. Whatever change we might want to make.
+
+2 ways to update a `map` in `elixir`
+
+- using `function`
+
+  ```elixir
+    colors = %{primary: "red"}
+    Map.put(colors, :primary, "blue")
+  ```
+
+- using interesting `syntax`: this syntax basedupdate to a map can only be used when
+  we are updating an existing property.
+
+  ```elixir
+    colors = %{primary: "red"}
+    %{ colors | primary: "blue" }
+  ```
+
+### Tuples
+
+```elixir
+tuples = { "red", "green", "blue"}
+```
+
+Tuples with pattern matching
+
+```elixir
+tuples = { "red", "green", "blue"}
+
+{ red_color, green_color, blue_color } = tuples
+```

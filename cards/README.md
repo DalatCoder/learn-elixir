@@ -308,3 +308,49 @@ Install the `xdocs` package
 - Open `mix.exs` file
 - `deps`: `[ { :ex_doc: "~> 0.12"} ]`
 - Run `mix deps.get` to install `:ex_doc` version `0.12`
+
+## Testing and Documentation
+
+Write documentations using `ex_doc`:
+
+- Module documentations
+- Function documentations
+
+```elixir
+defmodule Cards do
+  @moduledoc """
+    Provides methods for creating and handling a deck of cards
+  """
+end
+```
+
+```elixir
+defmodule Cards do
+  @moduledoc """
+    Provides methods for creating and handling a deck of cards
+  """
+
+  @doc """
+    Divides a deck into a hand and the remainder of the deck.
+    The `hand_size` argument indicates how many cards should
+    be in the hand.
+
+    ## Examples
+
+          iex> deck = Cards.create_deck
+          iex> {hand, deck} = Cards.deal(deck, 1)
+          iex> hand
+          ["Ace of spades"]
+  """
+  def create_deck do
+    values = ["Ace", "Two", "Three", "Four", "Five"]
+    suits = ["Spades", "Clubs", "Hearts", "Diamonds"]
+
+    for suit <- suits, value <- values do
+      "#{value} of #{suit}"
+    end
+  end
+end
+```
+
+- Generate docs using command: `mix docs`

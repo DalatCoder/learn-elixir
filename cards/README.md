@@ -577,3 +577,43 @@ tuples = { "red", "green", "blue"}
 
 { red_color, green_color, blue_color } = tuples
 ```
+
+### Keyword lists
+
+- Lists are like arrays, and they could be used for any arbitrary length. We have
+  as many elements in there as we want
+
+- Tuples are like arrays where each index has some special meaning to us.
+
+- Keyword lists are going to merge these two data structures into one that's going
+  to be like lists and tuples together.
+
+```elixir
+colors = [{:primary, "red"}, {:secondary, "green"}]
+
+colors[:primary]
+
+# or
+
+colors = [primary: "red", secondary: "blue"]
+```
+
+Where?
+
+- With `maps`, we could only have one property type per map, only one unique `key`
+- With `keyword lists`, we can make the same key as many times as we want.
+
+A lib called `echo`, with that library, we can form up a database query using a
+keyword lists.
+
+```elixir
+query = User.find_where([where: user.age > 10, where: user.subscribed == true])
+```
+
+Short syntax:
+
+- `[{:where: user.age > 10}]` -> `[where: user.age > 10]`
+- passing a keyword list to a function and the keyword list is the last args
+  `User.find_where(where: user.age > 10, where: user.subscribed == true)`
+- passing a keyword list to a function and the keyword list is the last args
+  `User.find_where where: user.age > 10, where: user.subscribed == true`

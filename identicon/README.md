@@ -253,3 +253,62 @@ end
 The code above means we pass the `ref` of `mirror_row` function
 into the `map` function. The `mirrow_row` function accepts 1
 args.
+
+### Grid structure
+
+```elixir
+def build_grid(image) do
+  %Identicon.Image{hex: hex} = image
+
+  hex
+  |> Enum.chunk(3)
+  |> Enum.map(&mirror_row/1)
+  |> List.flatten()
+  |> Enum.with_index()
+end
+```
+
+```elixir
+defmodule Identicon.Image do
+  defstruct hex: nil, color: nil, grid: nil
+end
+```
+
+```elixir
+def build_grid(image) do
+  %Identicon.Image{hex: hex} = image
+
+  grid =
+    hex
+    |> Enum.chunk(3)
+    |> Enum.map(&mirror_row/1)
+    |> List.flatten()
+    |> Enum.with_index()
+
+  %Identicon.Image{image | grid: grid}
+end
+```
+
+After that, we use filter to only get the list contains even number
+
+```elixir
+  def main(input) do
+    input
+    |> hash_input()
+    |> pick_color()
+    |> build_grid()
+    |> filter_odd_squares()
+  end
+
+  def filter_odd_squares(image) do
+    %Identicon.Image{grid: grid} = image
+
+    even_grid =
+      Enum.filter(grid, fn square ->
+        {code, _index} = square
+        rem(code, 2) == 0
+      end)
+
+    %Identicon.Image{image | grid: even_grid}
+  end
+```

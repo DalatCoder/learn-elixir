@@ -346,3 +346,79 @@ so that we can pass this information into the library to draw the image.
 ### Drawing rectangles
 
 We are going to use the `erlang` library called `egd` to draw image.
+
+To install the library:
+
+```elixir
+defmodule Identicon.MixProject do
+  use Mix.Project
+
+  def project do
+    [
+      app: :identicon,
+      version: "0.1.0",
+      elixir: "~> 1.14",
+      start_permanent: Mix.env() == :prod,
+      deps: deps()
+    ]
+  end
+
+  # Run "mix help compile.app" to learn about applications.
+  def application do
+    [
+      extra_applications: [:logger, :crypto]
+    ]
+  end
+
+  # Run "mix help deps" to learn about dependencies.
+  defp deps do
+    [
+      # {:dep_from_hexpm, "~> 0.3.0"},
+      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+      {:egd, github: "erlang/egd"}
+    ]
+  end
+end
+```
+
+Draw an image using `:egd`
+
+```elixir
+def draw_image(image) do
+  %Identicon.Image{color: color, pixel_map: pixel_map} = image
+
+  image = :egd.create(250, 250)
+  fill = :egd.color(color)
+
+  Enum.each(pixel_map, fn pixel ->
+    {start, stop} = pixel
+
+    :egd.filledRectangle(image, start, stop, fill)
+  end)
+
+  :egd.render(image)
+end
+```
+
+Save image to hard drive
+
+```elixir
+def save_image(image, input) do
+  File.write!("#{input}.png", image)
+end
+```
+
+Main pipeline
+
+```elixir
+def main(input) do
+  input
+  |> hash_input()
+  |> pick_color()
+  |> build_grid()
+  |> filter_odd_squares()
+  |> build_pixel_map()
+  |> draw_image()
+  |> save_image(input)
+end
+```

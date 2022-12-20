@@ -116,3 +116,28 @@ just a map under the hood and has absolutely no ability to
 attach any functions to it. It can only hold some primitive data.
 
 ### Pattern Matching Structs
+
+The `pick_color` purpose is going to be pull of the first three
+values of our `hex` list, which are going to serve as the `RGB`
+color for our identical.
+
+```elixir
+def pick_color(image) do
+  %Identicon.Image{hex: hex_list} = image
+  [red, green, blue | _tail] = hex_list
+
+  [red, green, blue]
+end
+```
+
+The code above means: give me the first three values, `RGB` and
+I don't care about the rest.
+
+Shorter
+
+```elixir
+def pick_color(image) do
+  %Identicon.Image{hex: [red, green, blue | _tail]} = image
+  [red, green, blue]
+end
+```

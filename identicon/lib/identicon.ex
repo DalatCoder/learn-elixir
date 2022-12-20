@@ -1,4 +1,6 @@
 defmodule Identicon do
+  alias JasonVendored.Encode
+
   def main(input) do
     input
     |> hash_input()
@@ -25,6 +27,7 @@ defmodule Identicon do
 
     hex
     |> Enum.chunk(3)
+    |> Enum.map(&mirror_row/1)
   end
 
   def mirror_row(row) do

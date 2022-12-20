@@ -218,3 +218,38 @@ end
 ```
 
 We use `++` operator to join two lists together.
+
+### Mapping with custom functions
+
+We could use the `Enum.map` function to transform our chunk
+into mirrow list item.
+
+```elixir
+def build_grid(image) do
+  %Identicon.Image{hex: hex} = image
+
+  hex
+  |> Enum.chunk(3)
+  |> Enum.map(mirror_row)
+end
+```
+
+However, if we just pass the function like this, by default,
+Elixir will going to invoke it.
+
+To pass a `reference` to a function in `elixir`, we use a
+little bit different syntax.
+
+```elixir
+def build_grid(image) do
+  %Identicon.Image{hex: hex} = image
+
+  hex
+  |> Enum.chunk(3)
+  |> Enum.map(&mirror_row/1)
+end
+```
+
+The code above means we pass the `ref` of `mirror_row` function
+into the `map` function. The `mirrow_row` function accepts 1
+args.
